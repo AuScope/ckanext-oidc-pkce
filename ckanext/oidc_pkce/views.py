@@ -108,6 +108,11 @@ def callback():
         config.token_url(), headers=headers, data=data
     ).json()
 
+    log.error(f"Token exchange response: {exchange}")
+    log.error(f"Received token_type: '{exchange.get('token_type')}'")
+    log.error(f"code: {code}")
+    log.error(f"code_verifier: {verifier}")
+
     # Get tokens and validate
     if not exchange.get("token_type"):
         error = "Unsupported token type. Should be 'Bearer'."
