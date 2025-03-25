@@ -92,14 +92,15 @@ def callback():
         "content-type": "application/x-www-form-urlencoded",
     }
 
-    if config.client_secret():
-        auth_header: str = config.client_id() + ":" + config.client_secret()
-        headers["Authorization"] = "Basic " + base64.b64encode(auth_header.encode('ascii')).decode('ascii')
+    # if config.client_secret():
+    #     auth_header: str = config.client_id() + ":" + config.client_secret()
+    #     headers["Authorization"] = "Basic " + base64.b64encode(auth_header.encode('ascii')).decode('ascii')
 
     data = {
         "grant_type": "authorization_code",
         "client_id": config.client_id(),
         "redirect_uri": config.redirect_url(),
+        "client_secret": config.client_secret(),
         "code": code,
         "code_verifier": verifier,
     }
@@ -108,6 +109,7 @@ def callback():
         config.token_url(), headers=headers, data=data
     ).json()
 
+    log.error(f"Token exchange response: {data}")
     log.error(f"Token exchange response: {exchange}")
     log.error(f"Received token_type: '{exchange.get('token_type')}'")
     log.error(f"code: {code}")
