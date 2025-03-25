@@ -92,6 +92,8 @@ def callback():
         "content-type": "application/x-www-form-urlencoded",
     }
 
+    if config.client_secret() is None:
+        log.error("Client Secret is missing from the config. Checkout the env varriables.")
     # if config.client_secret():
     #     auth_header: str = config.client_id() + ":" + config.client_secret()
     #     headers["Authorization"] = "Basic " + base64.b64encode(auth_header.encode('ascii')).decode('ascii')
@@ -108,12 +110,6 @@ def callback():
     exchange = requests.post(
         config.token_url(), headers=headers, data=data
     ).json()
-
-    log.error(f"Token exchange response: {data}")
-    log.error(f"Token exchange response: {exchange}")
-    log.error(f"Received token_type: '{exchange.get('token_type')}'")
-    log.error(f"code: {code}")
-    log.error(f"code_verifier: {verifier}")
 
     # Get tokens and validate
     if not exchange.get("token_type"):
